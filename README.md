@@ -37,3 +37,33 @@ If you are happy with the changes, or if you just want to force an update outsid
 ```
 
 This container will also create a crontab entry to run the certificate update function between 4-5am on Thursday mornings. I have randomised the minute so different installs will connect to the upstream servers at diffent times.
+
+## CREATING A CONTAINER
+
+```
+docker create \
+   --name <Container name> \
+   --hostname <Hostname of container> \
+   --network <Name of Docker network to connect to> \
+   --restart <Restart policy> \
+   --env DOMAIN=<The primary domain name of the certificate to renew> \
+   --env RENEWALOPTIONS="<Renewal options to pass to certbot certificate renewal client>" \
+   --env TZ=<Your Time Zone> \
+   --volume <Named volume or path to host folder>:/etc/letsencrypt/ \
+   boredazfcuk/letsencrypt
+```
+
+As an example, this is the command I run on my host machine:
+
+```
+docker create \
+   --name LetsEncrypt \
+   --hostname letsencrypt \
+   --network containers \
+   --restart always \
+   --env DOMAIN=thisisnt.reallymydomin.com \
+   --env RENEWALOPTIONS="--standalone --non-interactive --must-staple --staple-ocsp" \
+   --env TZ=Europe/London \
+   --volume letsencrypt_config:/etc/letsencrypt/ \
+   boredazfcuk/letsencrypt
+```
