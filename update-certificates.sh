@@ -48,8 +48,6 @@ UpdateCertificates(){
 
 ##### Script #####
 Initialise
-CreateGroup
-CreateUser
 if [ $# -eq 0 ]; then
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Check if certificates need an update"
    CheckCertificates
