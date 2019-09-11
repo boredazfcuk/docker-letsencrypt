@@ -1,11 +1,11 @@
 FROM alpine:latest
 MAINTAINER boredazfcuk
 ENV CONFIGDIR="/etc/letsencrypt" \
-   APPDEPENDENCIES="curl tzdata certbot certbot-nginx nginx nano"
+   APPDEPENDENCIES="tzdata certbot certbot-nginx nginx"
 
 COPY update-certificates.sh /usr/local/bin/update-certificates.sh
 
-RUN echo -e "$(date '+%d/%m/%Y - %H:%M:%S') | ***** BUILD STARTED *****"
+RUN echo -e "$(date '+%d/%m/%Y - %H:%M:%S') | ***** BUILD STARTED *****" && \
 echo "$(date '+%d/%m/%Y - %H:%M:%S') | Install application dependencies" && \
    apk add --no-cache --no-progress ${APPDEPENDENCIES} && \
 echo "$(date '+%d/%m/%Y - %H:%M:%S') | Set permissions on launch script" && \
