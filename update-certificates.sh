@@ -33,17 +33,17 @@ CheckCertificates(){
 
 ForceUpdateCertificates(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Force certificates renewal"
-   /usr/bin/certbot renew "${RENEWALOPTIONS}" --force
+   /usr/bin/certbot renew ${RENEWALOPTIONS} --force
 }
 
 TestUpdateCertificates(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Test certificates renewal"
-   /usr/bin/certbot renew "${RENEWALOPTIONS}" --dry-run
+   /usr/bin/certbot renew ${RENEWALOPTIONS} --dry-run
 }
 
 UpdateCertificates(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Renew certificates"
-   /usr/bin/certbot renew "${RENEWALOPTIONS}"
+   /usr/bin/certbot renew ${RENEWALOPTIONS}
 }
 
 ##### Script #####
