@@ -13,10 +13,10 @@ Initialise(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates directory: ${CERTIFICATESPATH}"
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificate renewal options: ${RENEWALOPTIONS}"
 
-   if [ $(grep -c "update-letsencrypt.sh" /etc/crontabs/root) -lt 1 ]; then
+   if [ $(grep -c "update-certificates.sh" /etc/crontabs/root) -lt 1 ]; then
       echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Initialise crontab"
       MIN=$(((RANDOM%60)))
-      echo -e "# min   hour    day     month   weekday command\n${MIN} 5 * * 4 /usr/local/bin/update-letsencrypt.sh" > /tmp/crontab.tmp
+      echo -e "# min   hour    day     month   weekday command\n${MIN} 5 * * 4 /usr/local/bin/update-certificates.sh" > /tmp/crontab.tmp
       crontab /tmp/crontab.tmp
       rm /tmp/crontab.tmp
    fi
