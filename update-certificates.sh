@@ -38,7 +38,7 @@ ForceUpdateCertificates(){
 
 TestUpdateCertificates(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Test certificates renewal"
-   /usr/bin/certbot renew ${RENEWALOPTIONS} --dry-run
+   /usr/bin/certbot renew ${RENEWALOPTIONS} --dry-run --debug
 }
 
 UpdateCertificates(){
