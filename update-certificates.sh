@@ -6,7 +6,7 @@ Initialise(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Initialise variables and working folders"
    if [ ! -d /run/nginx ]; then mkdir -p /run/nginx; fi
 
-   if [ -z "${DOMAIN}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR:    Domain not set, exiting"; exit 1; fi
+   if [ -z "${DOMAIN}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR:   Domain not set, exiting"; exit 1; fi
    if [ -z "${CERTIFICATESPATH}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') WARNING: Certificate path not specified, defaulting to ${CONFIGDIR}/live/${DOMAIN}/"; CERTIFICATESPATH="${CONFIGDIR}/live/${DOMAIN}/"; fi
    if [ -z "${RENEWALOPTIONS}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') WARNING: Renewal options not set, defaulting to '--standalone'"; RENEWALOPTIONS="--standalone"; fi
 
