@@ -4,16 +4,15 @@ ENV CONFIGDIR="/etc/letsencrypt" \
    APPDEPENDENCIES="tzdata certbot certbot-nginx nginx"
 
 COPY update-certificates.sh /usr/local/bin/update-certificates.sh
+COPY healthcheck.sh /usr/local/bin/healthcheck.sh
 
 RUN echo -e "$(date '+%d/%m/%Y - %H:%M:%S') | ***** BUILD STARTED *****" && \
 echo "$(date '+%d/%m/%Y - %H:%M:%S') | Install application dependencies" && \
    apk add --no-cache --no-progress ${APPDEPENDENCIES} && \
 echo "$(date '+%d/%m/%Y - %H:%M:%S') | Set permissions on launch script" && \
-   chmod 700 "/usr/local/bin/update-certificates.sh" && \
+   chmod 700 /usr/local/bin/update-certificates.sh && \
+   chmod +x /usr/local/bin/healthcheck.sh && \
 echo "$(date '+%d/%m/%Y - %H:%M:%S') | ***** BUILD COMPLETE *****"
-
-HEALTHCHECK --start-period=10s --interval=1m --timeout=10s \
-  CMD (if [ $(/bin/ash -c "certbot certificates --cert-name ${DOMAIN} | grep Expiry | cut -d':' -f 6 | sed 's/[^0-9]*//g'" 2>/dev/null) -lt 20 ]; then exit 1; fi)
 
 VOLUME "${CONFIGDIR}"
 
