@@ -3,17 +3,17 @@ An Alpine Linux Docker container for renewing Lets Encrypt certificates
 
 ## HARDCODED VARIABLES
 
-CONFIGDIR: This variable is hardcoded in the dockerfile as /etc/letsencrypt. All mentions of ${CONFIGDIR} beneath refer to the /etc/letsencrypt directory
+config_dir: This variable is hardcoded in the dockerfile as /etc/letsencrypt. All mentions of ${config_dir} beneath refer to the /etc/letsencrypt directory
 
 ## MANDATORY VARIABLES
 
-DOMAIN: This is the primary domain name of the certificate to renew. It will match the name of the ${CONFIGDIR}/live/<DOMAIN> directory.
+DOMAIN: This is the primary domain name of the certificate to renew. It will match the name of the ${config_dir}/live/<DOMAIN> directory.
 
 ## OPTIONAL VARIABLES
 
-CERTIFICATESPATH: This is the directory where your certificates are stored. If this is not set, it will default to ${CONFIGDIR}/live/${DOMAIN}/
+CERTIFICATESPATH: This is the directory where your certificates are stored. If this is not set, it will default to ${config_dir}/live/${DOMAIN}/
 
-RENEWALOPTIONS: This are any additional renewal options that you wish to pass to the certbot command. If it is not set, it will default to '--standalone'
+lets_encrypt_renewal_options: This are any additional renewal options that you wish to pass to the certbot command. If it is not set, it will default to '--standalone'
 
 ## COMMAND-LINE PARAMETERS
 
@@ -47,7 +47,7 @@ docker create \
    --network <Name of Docker network to connect to> \
    --restart <Restart policy> \
    --env DOMAIN=<The primary domain name of the certificate to renew> \
-   --env RENEWALOPTIONS="<Renewal options to pass to certbot certificate renewal client>" \
+   --env lets_encrypt_renewal_options="<Renewal options to pass to certbot certificate renewal client>" \
    --env TZ=<Your Time Zone> \
    --volume <Named volume or path to host folder>:/etc/letsencrypt/ \
    boredazfcuk/letsencrypt
@@ -62,7 +62,7 @@ docker create \
    --network containers \
    --restart always \
    --env DOMAIN=thisisnt.reallymydomin.com \
-   --env RENEWALOPTIONS="--standalone --non-interactive --must-staple --staple-ocsp" \
+   --env lets_encrypt_renewal_options="--standalone --non-interactive --must-staple --staple-ocsp" \
    --env TZ=Europe/London \
    --volume letsencrypt_config:/etc/letsencrypt/ \
    boredazfcuk/letsencrypt
