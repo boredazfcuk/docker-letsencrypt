@@ -8,16 +8,13 @@ Initialise(){
    if [ ! -d /run/nginx ]; then mkdir -p /run/nginx; fi
 
    if [ -z "${lets_encrypt_domains}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR:   Domain(s) not set, exiting"; exit 1; fi
-   if [ -z "${certificates_path}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') WARNING: Certificate path not specified, defaulting to ${config_dir}/live/"; certificates_path="${config_dir}/live/"; fi
-   if [ -z "${lets_encrypt_renewal_options}" ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') WARNING: Renewal options not set, defaulting to '--standalone'"; lets_encrypt_renewal_options="--standalone"; fi
-
-   echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates directory: ${certificates_path}"
-   echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificate renewal options: ${lets_encrypt_renewal_options}"
+   echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates directory: ${certificates_path:=${config_dir}/live/}"
+   echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificate renewal options: ${lets_encrypt_renewal_options:=--standalone}"
 
    if [ "$(grep -c "update-certificates.sh" /etc/crontabs/root)" -lt 1 ]; then
       echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Initialise crontab"
       minute=$(((RANDOM%60)))
-      echo -e "# min   hour    day     month   weekday command\n${minute} 5 * * 4 /usr/local/bin/update-certificates.sh" > /tmp/crontab.tmp
+      echo -e "# min   hour    day     month   weekday command\n${minute} 5 * * * /usr/local/bin/update-certificates.sh" > /tmp/crontab.tmp
       crontab /tmp/crontab.tmp
       rm /tmp/crontab.tmp
    fi
@@ -33,6 +30,8 @@ LaunchCertbot(){
          if [ "${days_until_expiry}" -lt 20 ]; then
             echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certbot ${certbot_action} certificate"
             /usr/bin/certbot "${certbot_action}" ${lets_encrypt_renewal_options} "-d ${lets_encrypt_domain}" ${dry_run} ${force}
+         else
+            echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificate renewal for domain ${lets_encrypt_domain} not required"
          fi
       else
          certbot_action="certonly"
