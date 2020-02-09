@@ -1,0 +1,4 @@
+20200209
+
+ - Change: Now using ENTRYPOINT launch methond instead of CMD
+ - Change: Use exec to launch crontab so process inherits PID from parent

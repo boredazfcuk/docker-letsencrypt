@@ -11,14 +11,17 @@ Initialise(){
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates directory: ${certificates_path:=${config_dir}/live/}"
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificate renewal options: ${lets_encrypt_renewal_options:=--standalone}"
 
-   if [ "$(grep -c "update-certificates.sh" /etc/crontabs/root)" -lt 1 ]; then
+   if [ -f "/etc/crontabs/root" ]; then
       echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Initialise crontab"
       minute=$(((RANDOM%60)))
-      echo -e "# min   hour    day     month   weekday command\n${minute} 5 * * * /usr/local/bin/update-certificates.sh" > /tmp/crontab.tmp
+      echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates will be renewed at 5:${minute} every day, if required"
+      {
+         echo "# min   hour    day     month   weekday command"
+         echo "${minute} 5 * * * /usr/local/bin/update-certificates.sh --update-only >/dev/stdout 2>&1"
+      } > /tmp/crontab.tmp
       crontab /tmp/crontab.tmp
       rm /tmp/crontab.tmp
    fi
-
 }
 
 LaunchCertbot(){
@@ -41,11 +44,17 @@ LaunchCertbot(){
    done
 }
 
+LaunchCrontab(){
+   echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Starting crontab"
+   exec /usr/sbin/crond -f -L /dev/stdout
+}
+
 ##### Script #####
 Initialise
 if [ $# -eq 0 ]; then
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Check if certificates need an update"
    LaunchCertbot
+   LaunchCrontab
 elif  [ $# -eq 1 ]; then
    for command_line_parameter in "$@"; do
       case "$command_line_parameter" in
@@ -57,9 +66,11 @@ elif  [ $# -eq 1 ]; then
             force="--force"
             LaunchCertbot
             ;;
+         --update-only)
+            LaunchCertbot
+            ;;
          *)
-            echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Syntax Error - Unknown option"
-            exit 1
+            LaunchCrontab
             ;;
       esac
    done
