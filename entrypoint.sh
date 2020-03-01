@@ -17,7 +17,7 @@ Initialise(){
       echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates will be renewed at 5:${minute} every day, if required"
       {
          echo "# min   hour    day     month   weekday command"
-         echo "${minute} 5 * * * /usr/local/bin/update-certificates.sh --update-only >/dev/stdout 2>&1"
+         echo "${minute} 5 * * * /usr/local/bin/entrypoint.sh --update-only >/dev/stdout 2>&1"
       } > /tmp/crontab.tmp
       crontab /tmp/crontab.tmp
       rm /tmp/crontab.tmp
@@ -27,19 +27,14 @@ Initialise(){
 LaunchCertbot(){
    for lets_encrypt_domain in ${lets_encrypt_domains}; do
       if [ -d "${certificates_path}/${lets_encrypt_domain}" ]; then
-         certbot_action="renew"
          echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Domain: $lets_encrypt_domain - $(/bin/ash -c "certbot certificates --cert-name ${lets_encrypt_domain} | grep Expiry | sed 's/^    //g'" 2>/dev/null)"
          days_until_expiry="$(/bin/ash -c "certbot certificates --cert-name ${lets_encrypt_domain} | grep Expiry | cut -d':' -f 6 | sed 's/[^0-9]*//g'" 2>/dev/null)"
          if [ "${days_until_expiry}" -lt 20 ]; then
-            echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certbot ${certbot_action} certificate"
-            /usr/bin/certbot "${certbot_action}" ${lets_encrypt_renewal_options} "-d ${lets_encrypt_domain}" ${dry_run} ${force}
+            echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Renewal required for ${lets_encrypt_domain}"
+            "$(which certbot)" certonly --webroot -w "/etc/letsencrypt/www" -d "${lets_encrypt_domain}" ${lets_encrypt_renewal_options} ${dry_run} ${force}
          else
             echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificate renewal for domain ${lets_encrypt_domain} not required"
          fi
-      else
-         certbot_action="certonly"
-         echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certbot ${certbot_action} certificate"
-         /usr/bin/certbot "${certbot_action}" --webroot -w "/etc/letsencrypt/www" ${lets_encrypt_renewal_options} "-d ${lets_encrypt_domain}" ${dry_run} ${force}
       fi
    done
 }

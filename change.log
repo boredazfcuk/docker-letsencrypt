@@ -1,3 +1,9 @@
+20200224
+
+ - Change: Forgot to update crontab file to run entrypoint.sh instead of update-certificates.sh
+ - Change: Logic for renewing multiple domains wasn't correct. Altered to remove the -d option from 'certbot renew'. 
+ - Change: Certbot was using the 'renew' option, which renews all certificates on a system. This introduces a problem in a multi-cert environment (Nextcloud) as it chucks an error if all certs haven't exipred. I've changed this to the 'certonly' renewal method and loop through each domain so they are renewed individually.
+
 20200209
 
  - Change: Now using ENTRYPOINT launch methond instead of CMD
