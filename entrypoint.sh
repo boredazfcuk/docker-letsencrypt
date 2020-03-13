@@ -4,6 +4,7 @@
 Initialise(){
    echo -e "\n"
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    ***** Starting Let's Encrypt container *****"
+   echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    $(cat /etc/*-release | grep "PRETTY_NAME" | sed 's/PRETTY_NAME=//g' | sed 's/"//g')"
    echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Initialise variables and working folders"
    if [ ! -d /run/nginx ]; then mkdir -p /run/nginx; fi
 
