@@ -1,3 +1,7 @@
+20200313
+
+ - Change: Log now displays OS version
+
 20200309
 
  - Change: Added leading zero to any single digit minute randomly generated for crontab time
