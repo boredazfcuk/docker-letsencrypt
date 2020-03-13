@@ -14,6 +14,7 @@ Initialise(){
    if [ -f "/etc/crontabs/root" ]; then
       echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Initialise crontab"
       minute=$(((RANDOM%60)))
+      if [ "${#minute}" -eq 1 ]; then minute="0${minute}"; fi
       echo "$(date '+%Y-%m-%d %H:%M:%S') INFO:    Certificates will be renewed at 5:${minute} every day, if required"
       {
          echo "# min   hour    day     month   weekday command"

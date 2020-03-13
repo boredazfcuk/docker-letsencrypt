@@ -1,3 +1,8 @@
+20200309
+
+ - Change: Added leading zero to any single digit minute randomly generated for crontab time
+ - Change: Healthcheck command 'certbot certificates' does an OSCP check against ocsp.int-x3.letsencrypt.org for certificate revocation. Certificate revocation status is only updated twice a day from what I understand. Healthcheck now exits out if a previous check was performed that day. This prevents spamming the LE server.
+
 20200224
 
  - Change: Forgot to update crontab file to run entrypoint.sh instead of update-certificates.sh
