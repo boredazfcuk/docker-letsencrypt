@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.12
 MAINTAINER boredazfcuk
 ARG app_dependencies="tzdata certbot"
 ENV config_dir="/etc/letsencrypt"
