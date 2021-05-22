@@ -67,3 +67,5 @@ docker create \
    --volume letsencrypt_config:/etc/letsencrypt/ \
    boredazfcuk/letsencrypt
 ```
+
+Litecoin: LfmogjcqJXHnvqGLTYri5M8BofqqXQttk4
