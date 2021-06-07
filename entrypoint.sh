@@ -34,6 +34,8 @@ LaunchCertbot(){
          if [ "${days_until_expiry}" -lt 20 ]; then
             echo "$(date '+%c')INFO:    Renewal required for ${lets_encrypt_domain}"
             "$(which certbot)" certonly --webroot -w "/etc/letsencrypt/www" -d "${lets_encrypt_domain}" ${lets_encrypt_renewal_options} ${dry_run} ${force}
+            current_cert_name="$(ls -rt /etc/letsencrypt/archive/${lets_encrypt_domain}/cert*.pem | tail -n 1)"
+            "$(which md5sum)" "${current_cert_name}" | awk '{print $1}' > "/etc/letsencrypt/archive/${lets_encrypt_domain}/cert.md5"
          else
             echo "$(date '+%c')INFO:    Certificate renewal for domain ${lets_encrypt_domain} not required"
          fi
