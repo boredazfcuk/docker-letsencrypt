@@ -19,7 +19,7 @@ Initialise(){
       echo "$(date '+%c') INFO:    Certificates will be renewed at 5:${minute} every day, if required"
       {
          echo "# min   hour    day     month   weekday command"
-         #echo "${minute} 5 * * *  /usr/local/bin/entrypoint.sh --update-only"
+         echo "${minute} 5 * * *  /usr/local/bin/entrypoint.sh --update-only"
       } > /tmp/crontab.tmp
       crontab /tmp/crontab.tmp
       rm /tmp/crontab.tmp
